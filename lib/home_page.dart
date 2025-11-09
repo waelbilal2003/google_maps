@@ -16,8 +16,6 @@ class _HomePageState extends State<HomePage> {
   double _zoom = 15.0;
   bool _loading = true;
 
-  get AttributionWidget => null;
-
   @override
   void initState() {
     super.initState();
@@ -49,7 +47,9 @@ class _HomePageState extends State<HomePage> {
     }
 
     final pos = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
+      locationSettings: const LocationSettings(
+        accuracy: LocationAccuracy.high,
+      ),
     );
     _currentLocation = LatLng(pos.latitude, pos.longitude);
 
@@ -60,7 +60,9 @@ class _HomePageState extends State<HomePage> {
   void _centerToCurrentLocation() async {
     try {
       final pos = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
       );
       final latlng = LatLng(pos.latitude, pos.longitude);
       _mapController.move(latlng, 17.0);
@@ -89,9 +91,12 @@ class _HomePageState extends State<HomePage> {
                 subdomains: const ['a', 'b', 'c'],
                 userAgentPackageName: 'com.example.app',
               ),
-              AttributionWidget.defaultWidget(
-                source: '© OpenStreetMap contributors',
-                onSourceTapped: null,
+              RichAttributionWidget(
+                attributions: [
+                  TextSourceAttribution(
+                    '© OpenStreetMap contributors',
+                  ),
+                ],
               ),
             ],
           ),
